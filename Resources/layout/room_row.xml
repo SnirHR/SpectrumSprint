@@ -1,25 +1,30 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-	android:layout_margin="10dp">
-	<TextView
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:text="Room Name"
-		android:textSize="20sp"
-		android:layout_weight="70" 
-		android:id="@+id/roomName"
+    android:layout_margin="10dp"
+    android:weightSum="100"
+    tools:ignore="MissingDimension">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Room Name"
+        android:textSize="20sp"
+        android:layout_weight="70"
+        android:id="@+id/roomName"
 	/>
     <Button
-		android:layout_width="0dp"
-		android:textColor="#fff"
-		android:gravity="center"
-        android:text="Join"  
+        android:layout_width="0dp"
+        android:textColor="#fff"
+        android:gravity="center"
+        android:text="Join"
         android:layout_height="wrap_content"
-		android:layout_weight="30" 
-		android:textAllCaps="false"
-		android:textSize="20sp"
+        android:layout_weight="30"
+        android:textAllCaps="false"
+        android:textSize="20sp"
         android:id="@+id/joinRoomButton" />
 
 </LinearLayout>

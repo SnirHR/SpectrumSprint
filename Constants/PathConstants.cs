@@ -14,10 +14,11 @@ namespace SpectrumSprint.Constants
     public class PathConstants
     {
         public const string CURRENT_USER_FILE = "currentUserFile";
-        public const string USER_COLLECTION = "user";
+        public const string LEADERBOARD_COLLECTION = "Leaderboard";
         public const string ROOMS_COLLECTION = "Rooms";
-        public const string LEADERBOARD_COLLECTION = "Rooms";
+        public const string USER_COLLECTION = "users";
+        public const string SEED = "Seed";
         public const string ROOM_NAME = "RoomName";
-        public const string PLAYER_SCORE = "RoomName";
+        public const string PLAYER_SCORE = "Score";
     }
 }

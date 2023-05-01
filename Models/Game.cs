@@ -1,74 +1,90 @@
-﻿using Android.App;
-using Android.Content;
-using Android.Graphics;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
+﻿using Android.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace SpectrumSprint.Resources.Models
+namespace SpectrumSprint.Models
 {
     public class Game
     {
+        List<Color> ColorArrangement;
         private long arrangement;
-        private int seed;
-        private int cycles;
+        private long seed;
+        private long cycles;
 
-        public Game(int seed)
+        public Game(long seed)
         { 
+            this.ColorArrangement = new List<Color>();
             this.seed = seed;
             this.cycles = 0;
+            CreateColorArrangement(CreateArrangement());
         }
 
-
-        public long CreateLevel(int seed)
+        public List<Color> GetColorArrangement()
         {
-            Random rnd = new Random(seed + cycles);
-            int arrangement = rnd.Next(0, 2147483647);
-            return arrangement;
+            return ColorArrangement;
         }
 
-        public List<Color> CreateColorArrangement(int arrangement)
+        public long CreateArrangement()
         {
-            List<Color> colorArrangement = new List<Color>();
+            long tempseed = (seed + cycles);
+            Random rnd = new Random((int)tempseed);
+            return rnd.Next(0, 2147483647);
+        }
+        public void NextSection()
+        {
+            cycles++;
+            CreateColorArrangement(CreateArrangement());
+
+        }
+        public void Played()
+        {
+            if (ColorArrangement.Count == 0)
+            {
+                NextSection();
+            }
+            ColorArrangement.Remove(ColorArrangement[0]);
+        }
+        private void CreateColorArrangement(long arrangement)
+        {
             string temp = arrangement.ToString();
             for (int i = 0; i < temp.Length; i++)
             {
                 switch (temp[i])
                 {
+                    case '0':
+                        this.ColorArrangement.Add(Color.DarkGreen);
+                        break;
                     case '1':
-                        colorArrangement.Add(Color.DarkGreen);
+                        this.ColorArrangement.Add(Color.DarkGreen);
                         break;
                     case '2':
-                        colorArrangement.Add(Color.DarkBlue);
+                        this.ColorArrangement.Add(Color.DarkBlue);
                         break;
                     case '3':
-                        colorArrangement.Add(Color.DeepPink);
+                        this.ColorArrangement.Add(Color.DeepPink);
                         break;
                     case '4':
-                        colorArrangement.Add(Color.DarkOrange);
+                        this.ColorArrangement.Add(Color.DarkOrange);
                         break;
                     case '5':
-                        colorArrangement.Add(Color.Green);
+                        this.ColorArrangement.Add(Color.Green);
                         break;
                     case '6':
-                        colorArrangement.Add(Color.Blue);
+                        this.ColorArrangement.Add(Color.Blue);
                         break;
                     case '7':
-                        colorArrangement.Add(Color.LightPink);
+                        this.ColorArrangement.Add(Color.LightPink);
                         break;
                     case '8':
-                        colorArrangement.Add(Color.Orange);
+                        this.ColorArrangement.Add(Color.Orange);
+                        break;
+                    case '9':
+                        this.ColorArrangement.Add(Color.Orange);
                         break;
                     default:
                         break;
                 }
             }
-            return colorArrangement;
         }
     }
 }

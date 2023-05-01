@@ -8,14 +8,21 @@
     android:layout_height="match_parent"
     android:weightSum="100"
     tools:ignore="MissingDimension">
-
+    <TextView
+        android:text="Leaderboard"
+        android:layout_gravity="center"
+        android:layout_weight="5"
+        android:textSize="45sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1" />
     <ListView
         android:minWidth="25dp"
         android:minHeight="25dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/leaderboardView"
-        android:layout_weight="98"
+        android:layout_weight="93"
     />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

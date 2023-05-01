@@ -34,7 +34,10 @@ namespace SpectrumSprint.Models
         public HashMap GetHashMapOfObject()
         {
             HashMap gNoHashMap = new HashMap();
-            gNoHashMap.Put("Name", this.playerName);
+            if (this.playerName != null)
+            {
+                gNoHashMap.Put("Name", this.playerName);
+            }
             return gNoHashMap;
         }
         

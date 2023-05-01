@@ -9,6 +9,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using SpectrumSprint.Activities;
+using SpectrumSprint.Constants;
 using SpectrumSprint.Models;
 
 namespace SpectrumSprint.Adapters
@@ -51,13 +52,8 @@ namespace SpectrumSprint.Adapters
         {
             int position = int.Parse(((Button)sender).Tag.ToString());
             NetworkObject networkObject = this.roomsList[position];
-            string roomName =networkObject.RoomName;
-            //GameNetworkObject gameNetworkObject = new GameNetworkObject(roomName);
-            //if (!await gameNetworkObject.ExistRoom())
-            //{
-            //    Toast.MakeText(this, "this room does not exist", ToastLength.Long).Show();
-            //    return;
-            //}
+            string roomName = networkObject.RoomName;
+            GameConstants.ROOM_NAME = roomName;
             Intent intent = new Intent((MainActivity)this.context, typeof(GameActivity));
             intent.PutExtra("RoomName", roomName);
             ((MainActivity)this.context).StartActivityForResult(intent, 100);

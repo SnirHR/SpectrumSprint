@@ -19,14 +19,29 @@ namespace SpectrumSprint.Handlers
             FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
             CollectionReference collectionRef = firestore.Collection(PathConstants.LEADERBOARD_COLLECTION);
             HashMap newRoom = new HashMap();
-            Long seed = MakeSeed(roomName);
+            long seed = MakeSeed(roomName);
+            GameConstants.SEED = seed;
             newRoom.Put("RoomName", roomName);
             newRoom.Put("Seed", seed);
 
             await collectionRef.Add(newRoom);
         }
+        public static async Task<long> GetSeed(string roomName)
+        {
+            long seed = 0;
+            FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
+            DocumentReference docRef = firestore.Collection(PathConstants.ROOMS_COLLECTION).Document(roomName);
+            DocumentSnapshot docSnapshot = (DocumentSnapshot)await docRef.Get();
+            
+            if (docSnapshot.Contains(PathConstants.SEED))
+            {
+                 seed = (long) docSnapshot.Get(PathConstants.SEED);
+            }
+            return seed;
 
-        private static Long MakeSeed(string input)
+
+        }
+        private static long MakeSeed(string input)
         {
             Random rnd = new Random();
             string seed = input + rnd.Next(1, 999); // מוסיף לשם החדר מספר אקראי בכדי לוודא שאותו השם לא יצור את אותו השלב
@@ -36,7 +51,7 @@ namespace SpectrumSprint.Handlers
             {
                 sum += (long)c;
             }
-            return Long.ValueOf(sum); 
+            return sum; 
         }
 
         public static async Task<List<NetworkObject>> GetLeaderboard()

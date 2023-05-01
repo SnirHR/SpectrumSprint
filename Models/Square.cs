@@ -32,9 +32,15 @@ namespace SpectrumSprint.Models
             this.paint = new Paint();
             this.paint.Color = color;
         }
+        public void SetColor(Color newColor)
+        {
+            this.paint.Color = newColor;
+        }
         public virtual void Draw(Canvas canvas)
         {
-            canvas.DrawRect(this.Left, this.Top, this.Right, this.Bottom, paint);
+            RectF rect = new RectF(this.Left, this.Top, this.Right, this.Bottom);
+            canvas.DrawRoundRect(rect,40,40,this.paint);
+
         }
         public virtual bool IsTouching(float x, float y)
         {
