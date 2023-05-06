@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.Content;
+using Android.Content.Res;
 using Android.Gms.Tasks;
 using Android.Graphics;
 using Android.Runtime;
@@ -7,12 +8,16 @@ using Android.Speech.Tts;
 using Android.Views;
 using Android.Widget;
 using Java.Util;
+using Kotlin.Jvm.Internal;
 using SpectrumSprint.Activities;
 using SpectrumSprint.Constants;
 using SpectrumSprint.Handlers;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
+using Locale = Java.Util.Locale;
+using TextToSpeech = Android.Speech.Tts.TextToSpeech;
 
 namespace SpectrumSprint.Models
 {
@@ -29,6 +34,7 @@ namespace SpectrumSprint.Models
         private long seed; // ה-SEED מוודא שהשחקנים שבאותו החדר ישחקו באותה המפה בדיוק
         private Thread thread;
         private Context context;
+        private Canvas canvas;
         public bool IsRunning { get; set; } = true; // בודק אם המשחק פעיל
         private TextToSpeech textToSpeech;
 
@@ -65,7 +71,7 @@ namespace SpectrumSprint.Models
             {
                 if (this.Holder.Surface.IsValid)
                 {
-                    Canvas canvas = Holder.LockCanvas();
+                    canvas = Holder.LockCanvas();
                     if (canvas != null)
                     {
                         indicator.SetColor(colorArrangement[0]);
@@ -74,11 +80,12 @@ namespace SpectrumSprint.Models
                         {
                             button.Draw(canvas);
                         }
-                        Holder.UnlockCanvasAndPost(canvas);
                     }
+                    Holder.UnlockCanvasAndPost(canvas);
                 }
             }
         }
+
         public override bool OnTouchEvent(MotionEvent e)
         {
             if (IsRunning)
@@ -89,7 +96,6 @@ namespace SpectrumSprint.Models
                     {
                         if (button.IsTouching(e.GetX(), e.GetY()))
                         {
-                            game.Played();
                             if (button.GetFillColor() != colorArrangement[0])
                             {
                                 textToSpeech.Speak("Wrong", QueueMode.Flush, null);
@@ -97,12 +103,13 @@ namespace SpectrumSprint.Models
                             
                             }
                             Toast.MakeText(this.context, button.GetFillColor().ToString(), ToastLength.Short).Show();
+                            game.Played();
                             return true;
                         }
                     }
                 }
             }
-            return false;
+            return true;
         }
 
         public void OnInit([GeneratedEnum] OperationResult status)

@@ -17,7 +17,7 @@ namespace SpectrumSprint.Handlers
         public static async void CreateRoom(string roomName)
         {
             FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
-            CollectionReference collectionRef = firestore.Collection(PathConstants.LEADERBOARD_COLLECTION);
+            CollectionReference collectionRef = firestore.Collection(PathConstants.ROOMS_COLLECTION);
             HashMap newRoom = new HashMap();
             long seed = MakeSeed(roomName);
             GameConstants.SEED = seed;
@@ -25,6 +25,18 @@ namespace SpectrumSprint.Handlers
             newRoom.Put("Seed", seed);
 
             await collectionRef.Add(newRoom);
+        }
+        private static long MakeSeed(string input)
+        {
+            Random rnd = new Random();
+            string seed = input + rnd.Next(1, 999); // מוסיף לשם החדר מספר אקראי בכדי לוודא שאותו השם לא יצור את אותו השלב
+            seed = Convert.ToBase64String(Encoding.UTF8.GetBytes(seed)); // ממיר את ה-Seed ל-Base64
+            long sum = 0;
+            foreach (char c in input) // הופך את המחרוזת לסכום של נתוני ה-ASCII של כל תו
+            {
+                sum += (long)c;
+            }
+            return sum; 
         }
         public static async Task<long> GetSeed(string roomName)
         {
@@ -40,18 +52,6 @@ namespace SpectrumSprint.Handlers
             return seed;
 
 
-        }
-        private static long MakeSeed(string input)
-        {
-            Random rnd = new Random();
-            string seed = input + rnd.Next(1, 999); // מוסיף לשם החדר מספר אקראי בכדי לוודא שאותו השם לא יצור את אותו השלב
-            seed = Convert.ToBase64String(Encoding.UTF8.GetBytes(seed)); // ממיר את ה-Seed ל-Base64
-            long sum = 0;
-            foreach (char c in input) // הופך את המחרוזת לסכום של נתוני ה-ASCII של כל תו
-            {
-                sum += (long)c;
-            }
-            return sum; 
         }
 
         public static async Task<List<NetworkObject>> GetLeaderboard()

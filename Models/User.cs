@@ -74,7 +74,7 @@ namespace SpectrumSprint.Models
         {
             try
             {
-                await this.firebaseAuthentication.CreateUserWithEmailAndPassword(this.Email, this.Password);
+                await firebaseAuthentication.CreateUserWithEmailAndPassword(this.Email, this.Password);
 
             }
             catch (Exception e)

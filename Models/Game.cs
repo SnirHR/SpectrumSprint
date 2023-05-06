@@ -7,7 +7,6 @@ namespace SpectrumSprint.Models
     public class Game
     {
         List<Color> ColorArrangement;
-        private long arrangement;
         private long seed;
         private long cycles;
 
@@ -38,7 +37,7 @@ namespace SpectrumSprint.Models
         }
         public void Played()
         {
-            if (ColorArrangement.Count == 0)
+            if (ColorArrangement.Count < 2)
             {
                 NextSection();
             }
@@ -52,7 +51,7 @@ namespace SpectrumSprint.Models
                 switch (temp[i])
                 {
                     case '0':
-                        this.ColorArrangement.Add(Color.DarkGreen);
+                        this.ColorArrangement.Add(Color.DeepPink);
                         break;
                     case '1':
                         this.ColorArrangement.Add(Color.DarkGreen);
@@ -79,7 +78,7 @@ namespace SpectrumSprint.Models
                         this.ColorArrangement.Add(Color.Orange);
                         break;
                     case '9':
-                        this.ColorArrangement.Add(Color.Orange);
+                        this.ColorArrangement.Add(Color.LightPink);
                         break;
                     default:
                         break;

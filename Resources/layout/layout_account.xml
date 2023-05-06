@@ -15,7 +15,7 @@
         android:textSize="45sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView1" />
+        android:id="@+id/textViewAccount" />
     <LinearLayout
         android:orientation="vertical"
         android:minWidth="25px"
@@ -42,7 +42,7 @@
             android:gravity="center"
             android:minWidth="25px"
             android:minHeight="25px"
-            android:id="@+id/textView1" />
+            android:id="@+id/textViewScore" />
         <Button
             android:text="Sign Out"
             android:background="@drawable/roundedbutton"
@@ -92,9 +92,6 @@
             android:id="@+id/buttonRegister" />
         
     </LinearLayout>
-
-
-    
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

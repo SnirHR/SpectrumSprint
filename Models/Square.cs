@@ -14,10 +14,10 @@ namespace SpectrumSprint.Models
 {
     public class Square
     {
-        protected float x, y;
-        protected float width;
-        protected float height;
         protected Paint paint;
+        protected float height;
+        protected float width;
+        protected float x, y;
         public float Right { get { return x + width; } }
         public float Left { get { return x; } }
         public float Top { get { return y; } }
@@ -25,12 +25,12 @@ namespace SpectrumSprint.Models
 
         public Square(float x, float y, float width, float height, Color color)
         {
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
             this.paint = new Paint();
             this.paint.Color = color;
+            this.width = width;
+            this.height = height;
+            this.x = x;
+            this.y = y;
         }
         public void SetColor(Color newColor)
         {
@@ -40,7 +40,6 @@ namespace SpectrumSprint.Models
         {
             RectF rect = new RectF(this.Left, this.Top, this.Right, this.Bottom);
             canvas.DrawRoundRect(rect,40,40,this.paint);
-
         }
         public virtual bool IsTouching(float x, float y)
         {
@@ -50,6 +49,5 @@ namespace SpectrumSprint.Models
             }
             return false;
         }
-
     }
 }
