@@ -3,4 +3,8 @@
     <string name="title_leaderboard">Leaderboard</string>
     <string name="title_home">Home</string>
     <string name="title_account">Account</string>
+	<string name="title_playername">Player Name</string>
+	<string name="text_signout">Sign out</string>
+	<string name="text_email">E-mail</string>
+
 </resources>

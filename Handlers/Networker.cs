@@ -32,11 +32,18 @@ namespace SpectrumSprint.Handlers
             string seed = input + rnd.Next(1, 999); // מוסיף לשם החדר מספר אקראי בכדי לוודא שאותו השם לא יצור את אותו השלב
             seed = Convert.ToBase64String(Encoding.UTF8.GetBytes(seed)); // ממיר את ה-Seed ל-Base64
             long sum = 0;
-            foreach (char c in input) // הופך את המחרוזת לסכום של נתוני ה-ASCII של כל תו
+            foreach (char c in seed) // הופך את המחרוזת לסכום של נתוני ה-ASCII של כל תו
             {
                 sum += (long)c;
             }
             return sum; 
+        }
+        public static async Task<string> GetName(string email)
+        {
+            FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
+            CollectionReference collection = firestore.Collection(PathConstants.Email_FIELD);
+            DocumentSnapshot document = (DocumentSnapshot) await collection.WhereEqualTo(PathConstants.Email_FIELD, "").Get();
+            return document.ToString();
         }
         public static async Task<long> GetSeed(string roomName)
         {
@@ -45,9 +52,9 @@ namespace SpectrumSprint.Handlers
             DocumentReference docRef = firestore.Collection(PathConstants.ROOMS_COLLECTION).Document(roomName);
             DocumentSnapshot docSnapshot = (DocumentSnapshot)await docRef.Get();
             
-            if (docSnapshot.Contains(PathConstants.SEED))
+            if (docSnapshot.Contains(PathConstants.SEED_FIELD))
             {
-                 seed = (long) docSnapshot.Get(PathConstants.SEED);
+                 seed = (long) docSnapshot.Get(PathConstants.SEED_FIELD);
             }
             return seed;
 

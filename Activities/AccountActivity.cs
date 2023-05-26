@@ -5,6 +5,9 @@ using Android.Views;
 using Android.Widget;
 using Google.Android.Material.BottomNavigation;
 using SpectrumSprint.Constants;
+using SpectrumSprint.Models;
+using System;
+using System.Resources;
 using Xamarin.Essentials;
 
 namespace SpectrumSprint.Activities
@@ -12,28 +15,163 @@ namespace SpectrumSprint.Activities
     [Activity(Label = "AccountActivity")]
     public class AccountActivity : Activity, BottomNavigationView.IOnNavigationItemSelectedListener
     {
-        LinearLayout profileLayout, SigninContainer;
+        private ISharedPreferences shared;
+        private LinearLayout profileLayout, LoginContainer;
+        public Button submitButton;
+        public EditText username,email,password;
+        protected TextView pageToggleText,profileName;
+        private Login login;
+        public int pageState = 0; //represents the current login state 0 = user is prompted to log in. 1 = prompted to register. 2 = currently logged in
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
             SetContentView(Resource.Layout.layout_account);
-            profileLayout = FindViewById<LinearLayout>(Resource.Id.profileContainer);
-            SigninContainer = FindViewById<LinearLayout>(Resource.Id.SigninContainer);
             Initialize();
         }
 
         public void Initialize()
         {
+            this.profileLayout = FindViewById<LinearLayout>(Resource.Id.profileContainer);
+            this.LoginContainer = FindViewById<LinearLayout>(Resource.Id.LoginContainer);
+            this.submitButton = FindViewById<Button>(Resource.Id.buttonSubmit);
+            this.pageToggleText = FindViewById<TextView>(Resource.Id.pageToggleText);
+            this.profileName = FindViewById<TextView>(Resource.Id.ProfileName);
+            this.username = FindViewById<EditText>(Resource.Id.userNameInput);
+            this.email = FindViewById<EditText>(Resource.Id.emailInput);
+            this.password = FindViewById<EditText>(Resource.Id.userNameInput);
+            this.login = new Login(this, this);
             BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.navigationAccount);
             navigation.SetOnNavigationItemSelectedListener(this);
-            var editor = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private);
-            if (editor.GetString("Email", "") == "")
+            shared = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private);
+            switch (shared.GetString("Email", ""))
             {
-                SigninContainer.Visibility = ViewStates.Visible;
-                profileLayout.Visibility = ViewStates.Gone;
+                case "":
+                    this.pageState = 0;
+                    break;
+                default:
+                    this.pageState = 2;
+                    break;
+            }
+            TogglePage(pageState);
+            pageToggleText.Click += PageToggleText_Click;
+            submitButton.Click += SubmitButton_Click;
+        }
+
+        private void PageToggleText_Click(object sender, EventArgs e)
+        {
+            switch(pageState)
+            {
+                case 0:
+                    pageState = 1;
+                    TogglePage(pageState);
+                    break;
+               case 1:
+                    pageState = 0;
+                    TogglePage(pageState);
+                    break;
+                default:
+                    break;
             }
         }
 
+        private async void SubmitButton_Click(object sender, EventArgs e)
+        {
+            if (pageState == 1)
+            {
+                dynamic SignedIn = await this.login.Register();
+                try
+                {
+                    if ((bool)SignedIn == true)
+                    {
+                        Toast.MakeText(this, "Register Successful!", ToastLength.Long).Show();
+                        TogglePage(2);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toast.MakeText(this, SignedIn, ToastLength.Long).Show();
+                }
+            }
+            if (pageState == 0)
+            {
+                dynamic SignedIn = await this.login.SignIn();
+                try
+                {
+                    if ((bool)SignedIn == true)
+                    {
+                        Toast.MakeText(this, "Login In Successful!", ToastLength.Long).Show();
+                        TogglePage(2);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Toast.MakeText(this, SignedIn, ToastLength.Long).Show();
+                }
+            }
+        }
+        public void TogglePage(int pageState)
+        {
+            this.pageState = pageState;
+            switch (this.pageState)
+            {
+                case 0:
+                    LoginContainer.Visibility = ViewStates.Visible;
+                    profileLayout.Visibility = ViewStates.Gone;
+                    username.Visibility = ViewStates.Gone;
+                    submitButton.Text = "Sign In";
+                    pageToggleText.Text = "Already have an account?";
+                    break;
+                case 1:
+                    LoginContainer.Visibility = ViewStates.Visible;
+                    profileLayout.Visibility = ViewStates.Gone;
+                    username.Visibility = ViewStates.Visible;
+                    submitButton.Text = "Register";
+                    pageToggleText.Text = "Already have an account?";
+                    break;
+                case 2:
+                    LoginContainer.Visibility = ViewStates.Gone;
+                    profileLayout.Visibility = ViewStates.Visible;
+                    profileName.Text = shared.GetString(PathConstants.USER_NAME, "Name");
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void TogglePage()
+        {
+            switch (shared.GetString("Email", ""))
+            {
+                case "":
+                    this.pageState = 0;
+                    break;
+                default:
+                    this.pageState = 2;
+                    break;
+            }
+            switch (this.pageState)
+            {
+                case 0:
+                    LoginContainer.Visibility = ViewStates.Visible;
+                    profileLayout.Visibility = ViewStates.Gone;
+                    submitButton.Text = "Sign In";
+                    pageToggleText.Text = "Already have an account?";
+                    break;
+                case 1:
+                    LoginContainer.Visibility = ViewStates.Visible;
+                    profileLayout.Visibility = ViewStates.Gone;
+                    username.Visibility = ViewStates.Visible;
+                    submitButton.Text = "Register";
+                    pageToggleText.Text = "Already have an account?";
+                    break;
+                case 2:
+                    LoginContainer.Visibility = ViewStates.Gone;
+                    profileLayout.Visibility = ViewStates.Visible;
+                    profileName.Text = shared.GetString(PathConstants.USER_NAME,"Name");
+                    break;
+                default:
+                    break;
+            }
+        }
         public bool OnNavigationItemSelected(IMenuItem item)
         {
             switch (item.ItemId)

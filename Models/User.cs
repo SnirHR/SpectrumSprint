@@ -29,8 +29,9 @@ namespace SpectrumSprint.Models
             this.database = ConnectionHandler.GetFirestore();
         }
 
-        public User(string email, string password)
+        public User(string name,string email, string password)
         {
+            this.Name = name;
             this.Email = email;
             this.Password = password;
             this.firebaseAuthentication = ConnectionHandler.GetFirebaseAuthentication();
@@ -43,6 +44,7 @@ namespace SpectrumSprint.Models
             {
                 await this.firebaseAuthentication.SignInWithEmailAndPassword(this.Email, this.Password);
                 var editor = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private).Edit();
+                editor.PutString("Name", await Networker.GetName(this.Email));
                 editor.PutString("Email", this.Email);
                 editor.PutString("Password", this.Password);
                 editor.Apply();
@@ -70,7 +72,7 @@ namespace SpectrumSprint.Models
             }
             return true;
         }
-        public async Task<bool> Register()
+        public async Task<dynamic> Register()
         {
             try
             {
@@ -79,19 +81,20 @@ namespace SpectrumSprint.Models
             }
             catch (Exception e)
             {
-                return false;
+                return e.Message;
             }
             try
             {
                 HashMap userMap = new HashMap();
+                userMap.Put("Name", this.Name);
                 userMap.Put("Email", this.Email);
                 DocumentReference userReference = this.database.Collection(PathConstants.USER_COLLECTION).Document(this.firebaseAuthentication.CurrentUser.Uid);
                 await userReference.Set(userMap);
             }
-            catch
+            catch (Exception e)
             {
 
-                return false;
+                return e.Message;
             }
             return true;
         }

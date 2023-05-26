@@ -57,6 +57,8 @@
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -79,6 +81,7 @@
     <Compile Include="Models\CanvasButton.cs" />
     <Compile Include="Models\Game.cs" />
     <Compile Include="Models\GameView.cs" />
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\NetworkObject.cs" />
     <Compile Include="Models\Square.cs" />
     <Compile Include="Models\User.cs" />

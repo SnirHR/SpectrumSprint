@@ -17,8 +17,10 @@ namespace SpectrumSprint.Constants
         public const string LEADERBOARD_COLLECTION = "Leaderboard";
         public const string ROOMS_COLLECTION = "Rooms";
         public const string USER_COLLECTION = "users";
-        public const string SEED = "Seed";
         public const string ROOM_NAME = "RoomName";
+        public const string USER_NAME = "Name";
         public const string PLAYER_SCORE = "Score";
+        public const string Email_FIELD = "Email";
+        public const string SEED_FIELD = "Seed";
     }
 }
