@@ -18,8 +18,8 @@ namespace SpectrumSprint.Activities
         private ISharedPreferences shared;
         private LinearLayout profileLayout, LoginContainer;
         public Button submitButton;
-        public EditText username,email,password;
-        protected TextView pageToggleText,profileName;
+        public EditText username, email, password;
+        protected TextView pageToggleText, profileName;
         private Login login;
         public int pageState = 0; //represents the current login state 0 = user is prompted to log in. 1 = prompted to register. 2 = currently logged in
         protected override void OnCreate(Bundle savedInstanceState)
@@ -59,13 +59,13 @@ namespace SpectrumSprint.Activities
 
         private void PageToggleText_Click(object sender, EventArgs e)
         {
-            switch(pageState)
+            switch (pageState)
             {
                 case 0:
                     pageState = 1;
                     TogglePage(pageState);
                     break;
-               case 1:
+                case 1:
                     pageState = 0;
                     TogglePage(pageState);
                     break;
@@ -78,34 +78,23 @@ namespace SpectrumSprint.Activities
         {
             if (pageState == 1)
             {
-                dynamic SignedIn = await this.login.Register();
-                try
+                if (await this.login.Register() == true)
                 {
-                    if ((bool)SignedIn == true)
-                    {
-                        Toast.MakeText(this, "Register Successful!", ToastLength.Long).Show();
-                        TogglePage(2);
-                    }
+                    Toast.MakeText(this, "Register Successful!", ToastLength.Long).Show();
+                    TogglePage(2);
                 }
-                catch (Exception ex)
+                else
                 {
-                    Toast.MakeText(this, SignedIn, ToastLength.Long).Show();
+
                 }
+                Toast.MakeText(this, SignedIn, ToastLength.Long).Show();
             }
             if (pageState == 0)
             {
-                dynamic SignedIn = await this.login.SignIn();
-                try
+                if (await this.login.SignIn() == true)
                 {
-                    if ((bool)SignedIn == true)
-                    {
-                        Toast.MakeText(this, "Login In Successful!", ToastLength.Long).Show();
-                        TogglePage(2);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Toast.MakeText(this, SignedIn, ToastLength.Long).Show();
+                    Toast.MakeText(this, "Login In Successful!", ToastLength.Long).Show();
+                    TogglePage(2);
                 }
             }
         }
