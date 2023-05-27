@@ -42,7 +42,7 @@ namespace SpectrumSprint.Handlers
         {
             FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
             CollectionReference collection = firestore.Collection(PathConstants.Email_FIELD);
-            DocumentSnapshot document = (DocumentSnapshot) await collection.WhereEqualTo(PathConstants.Email_FIELD, "").Get();
+            DocumentSnapshot document = (DocumentSnapshot) await collection.WhereEqualTo(PathConstants.Email_FIELD, email).Get();
             return document.ToString();
         }
         public static async Task<long> GetSeed(string roomName)

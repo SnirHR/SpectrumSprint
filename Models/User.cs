@@ -28,7 +28,13 @@ namespace SpectrumSprint.Models
             this.firebaseAuthentication = ConnectionHandler.GetFirebaseAuthentication();
             this.database = ConnectionHandler.GetFirestore();
         }
-
+        public User(string email, string password)
+        {
+            this.Email = email;
+            this.Password = password;
+            this.firebaseAuthentication = ConnectionHandler.GetFirebaseAuthentication();
+            this.database = ConnectionHandler.GetFirestore();
+        }
         public User(string name,string email, string password)
         {
             this.Name = name;
@@ -44,7 +50,8 @@ namespace SpectrumSprint.Models
             {
                 await this.firebaseAuthentication.SignInWithEmailAndPassword(this.Email, this.Password);
                 var editor = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private).Edit();
-                editor.PutString("Name", await Networker.GetName(this.Email));
+                this.Name = await Networker.GetName(this.Email);
+                editor.PutString("Name", this.Name);
                 editor.PutString("Email", this.Email);
                 editor.PutString("Password", this.Password);
                 editor.Apply();

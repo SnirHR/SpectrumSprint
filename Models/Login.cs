@@ -27,20 +27,18 @@ namespace SpectrumSprint.Models
         }
         public async Task<bool> SignIn()
         {
-            if (accountA.email.Text != "")
-            {
-                email = accountA.email.Text;
-                if (accountA.password.Text != "")
+                if (accountA.email.Text != "")
                 {
-                    if (accountA.password.Text.Length >= 8)
+                    this.email = accountA.email.Text;
+                    if (accountA.password.Text != "")
                     {
-                        password = accountA.password.Text;
-                        this.user = new User(name, email, password);
+                        this.password = accountA.password.Text;
+                        this.user = new User(email, password);
                         this.ShowProgressDialog("Logging in...");
                         dynamic state = await this.user.Login();
                         try
                         {
-                            if ((bool) state != false)
+                            if ((bool)state != false)
                             {
                                 this.progressDialog.Dismiss();
                                 return true;
@@ -48,24 +46,18 @@ namespace SpectrumSprint.Models
                         }
                         catch
                         {
-                            Toast.MakeText(instance, state , ToastLength.Long).Show();
+                            Toast.MakeText(instance, state, ToastLength.Long);
                             this.progressDialog.Dismiss();
                             return false;
-
                         }
-                        
                     }
-                    Toast.MakeText(instance, "Password must be atleast 8 characters", ToastLength.Long).Show();
                     this.progressDialog.Dismiss();
+                    Toast.MakeText(instance, "Please Enter Password", ToastLength.Long);
                     return false;
                 }
-                Toast.MakeText(instance, "Please Enter Password", ToastLength.Long).Show();
                 this.progressDialog.Dismiss();
+                Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long);
                 return false;
-            }
-            Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long).Show();
-            this.progressDialog.Dismiss();
-            return false;
         }
 
         public async Task<bool> Register()
@@ -76,7 +68,7 @@ namespace SpectrumSprint.Models
                 if (accountA.email.Text != "")
                 {
                     this.email = accountA.email.Text;
-                    if (accountA.password.Text != "")
+                    if (accountA.password.Text != "" || accountA.password.Text.Length > 7)
                     {
                         this.password = accountA.password.Text;
                         this.user = new User(name, email, password);
@@ -99,7 +91,7 @@ namespace SpectrumSprint.Models
                         }
                     }
                     this.progressDialog.Dismiss();
-                    Toast.MakeText(instance, "Please Enter Password", ToastLength.Long);
+                    Toast.MakeText(instance, "Password must contain atleast 8 characters", ToastLength.Long);
                     return false;
                 }
                 this.progressDialog.Dismiss();

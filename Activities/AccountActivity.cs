@@ -38,7 +38,7 @@ namespace SpectrumSprint.Activities
             this.profileName = FindViewById<TextView>(Resource.Id.ProfileName);
             this.username = FindViewById<EditText>(Resource.Id.userNameInput);
             this.email = FindViewById<EditText>(Resource.Id.emailInput);
-            this.password = FindViewById<EditText>(Resource.Id.userNameInput);
+            this.password = FindViewById<EditText>(Resource.Id.passwordInput);
             this.login = new Login(this, this);
             BottomNavigationView navigation = FindViewById<BottomNavigationView>(Resource.Id.navigationAccount);
             navigation.SetOnNavigationItemSelectedListener(this);
