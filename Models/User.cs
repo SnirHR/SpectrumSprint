@@ -62,6 +62,7 @@ namespace SpectrumSprint.Models
             {
                 var editor = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private).Edit();
                 editor.PutString("Email", "");
+                editor.PutString("Name", "");
                 editor.PutString("Password", "");
                 editor.Apply();
                 firebaseAuthentication.SignOut();

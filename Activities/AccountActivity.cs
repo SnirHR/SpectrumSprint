@@ -85,16 +85,19 @@ namespace SpectrumSprint.Activities
                 }
                 else
                 {
-
+                    Toast.MakeText(this, "Register Failed :(", ToastLength.Long).Show();
                 }
-                Toast.MakeText(this, SignedIn, ToastLength.Long).Show();
             }
-            if (pageState == 0)
+            else if (pageState == 0)
             {
                 if (await this.login.SignIn() == true)
                 {
                     Toast.MakeText(this, "Login In Successful!", ToastLength.Long).Show();
                     TogglePage(2);
+                }
+                else
+                {
+                    Toast.MakeText(this, "Login Failed :(", ToastLength.Long).Show();
                 }
             }
         }
@@ -104,23 +107,13 @@ namespace SpectrumSprint.Activities
             switch (this.pageState)
             {
                 case 0:
-                    LoginContainer.Visibility = ViewStates.Visible;
-                    profileLayout.Visibility = ViewStates.Gone;
-                    username.Visibility = ViewStates.Gone;
-                    submitButton.Text = "Sign In";
-                    pageToggleText.Text = "Already have an account?";
+                    ToggleLogin();
                     break;
                 case 1:
-                    LoginContainer.Visibility = ViewStates.Visible;
-                    profileLayout.Visibility = ViewStates.Gone;
-                    username.Visibility = ViewStates.Visible;
-                    submitButton.Text = "Register";
-                    pageToggleText.Text = "Already have an account?";
+                    ToggleRegister();
                     break;
                 case 2:
-                    LoginContainer.Visibility = ViewStates.Gone;
-                    profileLayout.Visibility = ViewStates.Visible;
-                    profileName.Text = shared.GetString(PathConstants.USER_NAME, "Name");
+                    toggleProfile();
                     break;
                 default:
                     break;
@@ -140,22 +133,13 @@ namespace SpectrumSprint.Activities
             switch (this.pageState)
             {
                 case 0:
-                    LoginContainer.Visibility = ViewStates.Visible;
-                    profileLayout.Visibility = ViewStates.Gone;
-                    submitButton.Text = "Sign In";
-                    pageToggleText.Text = "Already have an account?";
+                    ToggleLogin();
                     break;
                 case 1:
-                    LoginContainer.Visibility = ViewStates.Visible;
-                    profileLayout.Visibility = ViewStates.Gone;
-                    username.Visibility = ViewStates.Visible;
-                    submitButton.Text = "Register";
-                    pageToggleText.Text = "Already have an account?";
+                    ToggleRegister();
                     break;
                 case 2:
-                    LoginContainer.Visibility = ViewStates.Gone;
-                    profileLayout.Visibility = ViewStates.Visible;
-                    profileName.Text = shared.GetString(PathConstants.USER_NAME,"Name");
+                    toggleProfile();
                     break;
                 default:
                     break;
@@ -179,5 +163,30 @@ namespace SpectrumSprint.Activities
             }
             return false;
         }
+
+        private void toggleProfile()
+        {
+            LoginContainer.Visibility = ViewStates.Gone;
+            profileLayout.Visibility = ViewStates.Visible;
+            profileName.Text = shared.GetString(PathConstants.USER_NAME, "Name");
+        }
+        private void ToggleLogin()
+        {
+            LoginContainer.Visibility = ViewStates.Visible;
+            profileLayout.Visibility = ViewStates.Gone;
+            username.Visibility = ViewStates.Gone;
+            submitButton.Text = "Sign In";
+            pageToggleText.Text = "Already have an account?";
+        }
+
+        private void ToggleRegister()
+        {
+            LoginContainer.Visibility = ViewStates.Visible;
+            profileLayout.Visibility = ViewStates.Gone;
+            username.Visibility = ViewStates.Visible;
+            submitButton.Text = "Register";
+            pageToggleText.Text = "Already have an account?";
+        }
+
     }
 }

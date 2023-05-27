@@ -25,7 +25,6 @@ namespace SpectrumSprint.Models
             this.instance = instance;
             this.accountA = accountA;
         }
-
         public async Task<bool> SignIn()
         {
             if (accountA.email.Text != "")
@@ -71,36 +70,44 @@ namespace SpectrumSprint.Models
 
         public async Task<bool> Register()
         {
-            if (accountA.email.Text != "")
+            if (accountA.username.Text != "" || accountA.username.Text.Length > 1)
             {
-                this.email = accountA.email.Text;
-                if (accountA.password.Text != "")
+                this.name = accountA.username.Text;
+                if (accountA.email.Text != "")
                 {
-                    this.password = accountA.password.Text;
-                    this.user = new User(name, email, password);
-                    this.ShowProgressDialog("Registering...");
-                    dynamic state = await this.user.Register();
-                    try
+                    this.email = accountA.email.Text;
+                    if (accountA.password.Text != "")
                     {
-                        if ((bool)state != false)
+                        this.password = accountA.password.Text;
+                        this.user = new User(name, email, password);
+                        this.ShowProgressDialog("Registering...");
+                        dynamic state = await this.user.Register();
+                        try
                         {
+                            if ((bool)state != false)
+                            {
+                                this.progressDialog.Dismiss();
+                                await this.user.Login();
+                                return true;
+                            }
+                        }
+                        catch
+                        {
+                            Toast.MakeText(instance, state, ToastLength.Long);
                             this.progressDialog.Dismiss();
-                            return true;
+                            return false;
                         }
                     }
-                    catch
-                    {
-                        Toast.MakeText(instance, state, ToastLength.Long);
-                        this.progressDialog.Dismiss();
-                        return false;
-                    }
+                    this.progressDialog.Dismiss();
+                    Toast.MakeText(instance, "Please Enter Password", ToastLength.Long);
+                    return false;
                 }
                 this.progressDialog.Dismiss();
-                Toast.MakeText(instance, "Please Enter Password", ToastLength.Long);
+                Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long);
                 return false;
             }
             this.progressDialog.Dismiss();
-            Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long);
+            Toast.MakeText(instance, "Please a valid name", ToastLength.Long);
             return false;
         }
 
