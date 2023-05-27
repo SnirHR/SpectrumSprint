@@ -56,14 +56,13 @@ namespace SpectrumSprint.Models
                 editor.PutString("Password", this.Password);
                 editor.Apply();
             }
-            catch (Exception ex)
+            catch 
             {
-                string s = ex.Message;
                 return false;
             }
             return true;
         }
-        public async Task<bool> Logout()
+        public bool Logout()
         {
             try
             {

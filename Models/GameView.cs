@@ -3,6 +3,7 @@ using Android.Content;
 using Android.Content.Res;
 using Android.Gms.Tasks;
 using Android.Graphics;
+using Android.Graphics.Drawables.Shapes;
 using Android.Runtime;
 using Android.Speech.Tts;
 using Android.Views;
@@ -32,6 +33,7 @@ namespace SpectrumSprint.Models
         private float margin; // משתנה שיחזיק את כמות הרווח שיש בין כפתור לכפתור
         private Game game; // עצם שמחזיק את כל פרטי המשחק הנחוצים לפעילותו
         private long seed; // ה-SEED מוודא שהשחקנים שבאותו החדר ישחקו באותה המפה בדיוק
+        private int counter;
         private Thread thread;
         private Context context;
         private Canvas canvas;
@@ -46,6 +48,7 @@ namespace SpectrumSprint.Models
            this.colorButtons = new CanvasButton[8];
            this.textToSpeech = new TextToSpeech(context, this);
            this.margin = 22;
+           this.counter = 0;
            this.buttonSize = (screenWidth - 5 * margin) / 4;
            this.seed = seed;
            StartGame();
@@ -99,9 +102,11 @@ namespace SpectrumSprint.Models
                             if (button.GetFillColor() != colorArrangement[0])
                             {
                                 textToSpeech.Speak("Wrong", QueueMode.Flush, null);
-                                return false;
+                                Finish();
+                                return true;
                             
                             }
+                            counter++;
                             Toast.MakeText(this.context, button.GetFillColor().ToString(), ToastLength.Short).Show();
                             game.Played();
                             return true;
@@ -111,7 +116,18 @@ namespace SpectrumSprint.Models
             }
             return true;
         }
-
+        private void Finish()
+        {
+            var shared = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private);
+            this.IsRunning = false;
+            if (shared.GetString("Name","Unnamed") != "")
+            {
+                Networker.CreateLeaderboardScore(counter);
+            }
+            Intent intent = new Intent(context, typeof(ActivityEnd));
+            intent.PutExtra("Score", counter);
+            Context.StartActivity(intent);
+        }
         public void OnInit([GeneratedEnum] OperationResult status)
         {
             if (status == OperationResult.Success)

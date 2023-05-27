@@ -1,4 +1,6 @@
-﻿using Android.Graphics;
+﻿using Android.Content;
+using Android.Graphics;
+using SpectrumSprint.Activities;
 using System;
 using System.Collections.Generic;
 

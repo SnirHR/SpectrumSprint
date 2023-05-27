@@ -36,6 +36,7 @@ namespace SpectrumSprint.Activities
             navigation.SetOnNavigationItemSelectedListener(this);
             listPlayers = FindViewById<ListView>(Resource.Id.leaderboardView);
             playersList = await Networker.GetLeaderboard();
+            playersList.Sort((p1, p2) => p2.score.CompareTo(p1.score));
             LeaderboardAdapter = new LeaderboardAdapter(this, playersList);
             listPlayers.Adapter = LeaderboardAdapter;
 

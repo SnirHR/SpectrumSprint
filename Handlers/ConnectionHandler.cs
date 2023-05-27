@@ -29,7 +29,7 @@ namespace SpectrumSprint.Handlers
                     .SetStorageBucket("bagrot-e5280.appspot.com")
                     .Build();
 
-                app = FirebaseApp.InitializeApp(Application.Context, options, "Sumber");
+                app = FirebaseApp.InitializeApp(Application.Context, options, "Bagrot");
                 database = FirebaseFirestore.GetInstance(app);
             }
             else

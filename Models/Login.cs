@@ -30,9 +30,10 @@ namespace SpectrumSprint.Models
                 if (accountA.email.Text != "")
                 {
                     this.email = accountA.email.Text;
-                    if (accountA.password.Text != "")
+                    if (accountA.password.Text.ToString() != "" || accountA.password.Text != null)
                     {
-                        this.password = accountA.password.Text;
+                        Toast.MakeText(instance, accountA.password.Text,ToastLength.Long).Show();
+                        this.password = accountA.password.Text.ToString();
                         this.user = new User(email, password);
                         this.ShowProgressDialog("Logging in...");
                         dynamic state = await this.user.Login();
@@ -46,17 +47,17 @@ namespace SpectrumSprint.Models
                         }
                         catch
                         {
-                            Toast.MakeText(instance, state, ToastLength.Long);
+                            Toast.MakeText(instance, state, ToastLength.Long).Show();
                             this.progressDialog.Dismiss();
                             return false;
                         }
                     }
                     this.progressDialog.Dismiss();
-                    Toast.MakeText(instance, "Please Enter Password", ToastLength.Long);
+                    Toast.MakeText(instance, "Please Enter Password", ToastLength.Long).Show();
                     return false;
                 }
                 this.progressDialog.Dismiss();
-                Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long);
+                Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long).Show();
                 return false;
         }
 
@@ -79,23 +80,22 @@ namespace SpectrumSprint.Models
                             if ((bool)state != false)
                             {
                                 this.progressDialog.Dismiss();
-                                await this.user.Login();
                                 return true;
                             }
                         }
                         catch
                         {
-                            Toast.MakeText(instance, state, ToastLength.Long);
+                            Toast.MakeText(instance, state, ToastLength.Long).Show();
                             this.progressDialog.Dismiss();
                             return false;
                         }
                     }
                     this.progressDialog.Dismiss();
-                    Toast.MakeText(instance, "Password must contain atleast 8 characters", ToastLength.Long);
+                    Toast.MakeText(instance, "Password must contain atleast 8 characters", ToastLength.Long).Show();
                     return false;
                 }
                 this.progressDialog.Dismiss();
-                Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long);
+                Toast.MakeText(instance, "Please Enter E-mail", ToastLength.Long).Show();
                 return false;
             }
             this.progressDialog.Dismiss();

@@ -5,6 +5,7 @@ using Android.Views;
 using Android.Widget;
 using Google.Android.Material.BottomNavigation;
 using SpectrumSprint.Constants;
+using SpectrumSprint.Handlers;
 using SpectrumSprint.Models;
 using System;
 using System.Resources;
@@ -17,7 +18,7 @@ namespace SpectrumSprint.Activities
     {
         private ISharedPreferences shared;
         private LinearLayout profileLayout, LoginContainer;
-        public Button submitButton;
+        public Button submitButton,Signout;
         public EditText username, email, password;
         protected TextView pageToggleText, profileName;
         private Login login;
@@ -34,6 +35,7 @@ namespace SpectrumSprint.Activities
             this.profileLayout = FindViewById<LinearLayout>(Resource.Id.profileContainer);
             this.LoginContainer = FindViewById<LinearLayout>(Resource.Id.LoginContainer);
             this.submitButton = FindViewById<Button>(Resource.Id.buttonSubmit);
+            this.Signout = FindViewById<Button>(Resource.Id.signOutButton);
             this.pageToggleText = FindViewById<TextView>(Resource.Id.pageToggleText);
             this.profileName = FindViewById<TextView>(Resource.Id.ProfileName);
             this.username = FindViewById<EditText>(Resource.Id.userNameInput);
@@ -55,6 +57,13 @@ namespace SpectrumSprint.Activities
             TogglePage(pageState);
             pageToggleText.Click += PageToggleText_Click;
             submitButton.Click += SubmitButton_Click;
+            Signout.Click += Signout_Click;
+        }
+
+        private async void Signout_Click(object sender, EventArgs e)
+        {
+            await Networker.Logout();
+            TogglePage(0);
         }
 
         private void PageToggleText_Click(object sender, EventArgs e)
@@ -176,7 +185,7 @@ namespace SpectrumSprint.Activities
             profileLayout.Visibility = ViewStates.Gone;
             username.Visibility = ViewStates.Gone;
             submitButton.Text = "Sign In";
-            pageToggleText.Text = "Already have an account?";
+            pageToggleText.Text = "Don't have an account?";
         }
 
         private void ToggleRegister()

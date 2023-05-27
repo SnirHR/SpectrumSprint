@@ -9,11 +9,25 @@ using System;
 using Java.Lang;
 using Java.Util;
 using Firebase.Firestore;
+using Android.Content;
+using Android.App;
+using System.Linq;
 
 namespace SpectrumSprint.Handlers
 {
     public class Networker
     {
+        public static async void CreateLeaderboardScore(int score)
+        {
+            var shared = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private);
+            FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
+            CollectionReference collectionRef = firestore.Collection(PathConstants.LEADERBOARD_COLLECTION);
+            HashMap newScore = new HashMap();
+            newScore.Put("Name",PathConstants.USER_NAME);
+            newScore.Put("Score", score);
+
+            await collectionRef.Add(newScore);
+        }
         public static async void CreateRoom(string roomName)
         {
             FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
@@ -40,10 +54,35 @@ namespace SpectrumSprint.Handlers
         }
         public static async Task<string> GetName(string email)
         {
-            FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
-            CollectionReference collection = firestore.Collection(PathConstants.Email_FIELD);
-            DocumentSnapshot document = (DocumentSnapshot) await collection.WhereEqualTo(PathConstants.Email_FIELD, email).Get();
-            return document.ToString();
+            FirebaseFirestore database = ConnectionHandler.GetFirestore();
+            try
+            {
+                CollectionReference collection = database.Collection(PathConstants.USER_COLLECTION);
+
+                QuerySnapshot querySnapshot = (QuerySnapshot) await collection.WhereEqualTo(PathConstants.Email_FIELD, email).Get();
+
+                if (querySnapshot.Documents.Count > 0)
+                {
+                    DocumentSnapshot documentSnapshot = querySnapshot.Documents[0];
+                    if (documentSnapshot.Contains(PathConstants.USER_NAME))
+                    {
+                        string name = documentSnapshot.GetString(PathConstants.USER_NAME);
+                        return name;
+                    }
+                    else
+                    {
+                        return "Name not found";
+                    }
+                }
+                else
+                {
+                    return "User not found";
+                }
+            }
+            catch
+            {
+                return "Error";
+            }
         }
         public static async Task<long> GetSeed(string roomName)
         {
@@ -100,6 +139,23 @@ namespace SpectrumSprint.Handlers
             }
         }
 
+        public static async Task<bool> Logout()
+        {
+            try
+            {
+                var editor = Application.Context.GetSharedPreferences(PathConstants.CURRENT_USER_FILE, FileCreationMode.Private).Edit();
+                editor.PutString("Email", "");
+                editor.PutString("Name", "");
+                editor.PutString("Password", "");
+                editor.Apply();
+                ConnectionHandler.GetFirebaseAuthentication().SignOut();
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
         public static async Task<NetworkObject> GetNetWorkObject(string PlayerName,string collection)
         {
             NetworkObject networkObject = null;
