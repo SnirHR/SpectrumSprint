@@ -178,6 +178,7 @@ namespace SpectrumSprint.Activities
             LoginContainer.Visibility = ViewStates.Gone;
             profileLayout.Visibility = ViewStates.Visible;
             profileName.Text = shared.GetString(PathConstants.USER_NAME, "Name");
+
         }
         private void ToggleLogin()
         {

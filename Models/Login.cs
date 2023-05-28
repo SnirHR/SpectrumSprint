@@ -80,6 +80,7 @@ namespace SpectrumSprint.Models
                             if ((bool)state != false)
                             {
                                 this.progressDialog.Dismiss();
+                                await SignIn();
                                 return true;
                             }
                         }
