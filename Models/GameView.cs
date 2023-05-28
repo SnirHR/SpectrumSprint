@@ -107,7 +107,6 @@ namespace SpectrumSprint.Models
                             
                             }
                             counter++;
-                            Toast.MakeText(this.context, button.GetFillColor().ToString(), ToastLength.Short).Show();
                             game.Played();
                             return true;
                         }

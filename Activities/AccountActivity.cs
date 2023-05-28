@@ -20,7 +20,7 @@ namespace SpectrumSprint.Activities
         private LinearLayout profileLayout, LoginContainer;
         public Button submitButton,Signout;
         public EditText username, email, password;
-        protected TextView pageToggleText, profileName;
+        protected TextView pageToggleText, profileName,profileScore;
         private Login login;
         public int pageState = 0; //represents the current login state 0 = user is prompted to log in. 1 = prompted to register. 2 = currently logged in
         protected override void OnCreate(Bundle savedInstanceState)
@@ -38,6 +38,7 @@ namespace SpectrumSprint.Activities
             this.Signout = FindViewById<Button>(Resource.Id.signOutButton);
             this.pageToggleText = FindViewById<TextView>(Resource.Id.pageToggleText);
             this.profileName = FindViewById<TextView>(Resource.Id.ProfileName);
+            this.profileScore = FindViewById<TextView>(Resource.Id.profileScore);
             this.username = FindViewById<EditText>(Resource.Id.userNameInput);
             this.email = FindViewById<EditText>(Resource.Id.emailInput);
             this.password = FindViewById<EditText>(Resource.Id.passwordInput);
@@ -173,11 +174,14 @@ namespace SpectrumSprint.Activities
             return false;
         }
 
-        private void toggleProfile()
+        private async void toggleProfile()
         {
             LoginContainer.Visibility = ViewStates.Gone;
             profileLayout.Visibility = ViewStates.Visible;
-            profileName.Text = shared.GetString(PathConstants.USER_NAME, "Name");
+            string name = shared.GetString(PathConstants.USER_NAME, "Name");
+            profileName.Text = name;
+            profileScore.Text = (await Networker.GetScore(name)).ToString();
+
         }
         private void ToggleLogin()
         {

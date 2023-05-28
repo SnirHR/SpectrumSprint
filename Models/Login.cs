@@ -32,7 +32,6 @@ namespace SpectrumSprint.Models
                     this.email = accountA.email.Text;
                     if (accountA.password.Text.ToString() != "" || accountA.password.Text != null)
                     {
-                        Toast.MakeText(instance, accountA.password.Text,ToastLength.Long).Show();
                         this.password = accountA.password.Text.ToString();
                         this.user = new User(email, password);
                         this.ShowProgressDialog("Logging in...");
@@ -80,6 +79,7 @@ namespace SpectrumSprint.Models
                             if ((bool)state != false)
                             {
                                 this.progressDialog.Dismiss();
+                                await this.user.Login();
                                 return true;
                             }
                         }

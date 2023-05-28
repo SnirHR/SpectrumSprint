@@ -23,7 +23,7 @@ namespace SpectrumSprint.Handlers
             FirebaseFirestore firestore = ConnectionHandler.GetFirestore();
             CollectionReference collectionRef = firestore.Collection(PathConstants.LEADERBOARD_COLLECTION);
             HashMap newScore = new HashMap();
-            newScore.Put("Name",PathConstants.USER_NAME);
+            newScore.Put("Name", await GetName(shared.GetString("Email","Name")));
             newScore.Put("Score", score);
 
             await collectionRef.Add(newScore);
@@ -51,6 +51,38 @@ namespace SpectrumSprint.Handlers
                 sum += (long)c;
             }
             return sum; 
+        }
+        public static async Task<long> GetScore(string name)
+        {
+            FirebaseFirestore database = ConnectionHandler.GetFirestore();
+            try
+            {
+                CollectionReference collection = database.Collection(PathConstants.LEADERBOARD_COLLECTION);
+
+                QuerySnapshot querySnapshot = (QuerySnapshot)await collection.WhereEqualTo(PathConstants.USER_NAME, name).Get();
+
+                if (querySnapshot.Documents.Count > 0)
+                {
+                    DocumentSnapshot documentSnapshot = querySnapshot.Documents[0];
+                    if (documentSnapshot.Contains(PathConstants.PLAYER_SCORE))
+                    {
+
+                        return (long) documentSnapshot.GetLong(PathConstants.PLAYER_SCORE);
+                    }
+                    else
+                    {
+                        return -1;
+                    }
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            catch
+            {
+                return -1;
+            }
         }
         public static async Task<string> GetName(string email)
         {
@@ -84,6 +116,7 @@ namespace SpectrumSprint.Handlers
                 return "Error";
             }
         }
+
         public static async Task<long> GetSeed(string roomName)
         {
             long seed = 0;
@@ -96,8 +129,6 @@ namespace SpectrumSprint.Handlers
                  seed = (long) docSnapshot.Get(PathConstants.SEED_FIELD);
             }
             return seed;
-
-
         }
 
         public static async Task<List<NetworkObject>> GetLeaderboard()

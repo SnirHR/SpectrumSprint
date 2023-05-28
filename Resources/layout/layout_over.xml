@@ -30,5 +30,14 @@
         android:minWidth="25px"
         android:minHeight="25px"
         android:id="@+id/textOverScore" />
-
+       <Button
+           android:text="Go Home"
+           android:textAllCaps="false"
+           android:textColor="#fff"
+           android:layout_gravity="center"
+           android:layout_width="200dp"
+           android:layout_height="wrap_content"
+           android:background="@drawable/roundedbutton"
+           android:id="@+id/buttonGoHome" />
+       
 </LinearLayout>
